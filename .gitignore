@@ -19,14 +19,13 @@
 *.[Cc]ache
 *.ilk
 *.log
+*.lib
 *.exe
+*.txt
+*.csv
 *.pdb
 *.sbr
-*.txt
-*.csv
 *.sdf
-*.txt
-*.csv
 *.opensdf
 *.unsuccessfulbuild
 ipch/
