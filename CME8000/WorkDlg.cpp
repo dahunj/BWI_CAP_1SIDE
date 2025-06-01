@@ -242,7 +242,6 @@ void CWorkDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 	if (bShow) {
 		// 화면전환시 AVI 와 CAP 간 연결 변수 FALSE로 만들기, 연결되어 있으면 다시 LED에 불 들어옴
-		g_objAviUDP.Set_ConnectStatus (FALSE); 
 		g_objAviUDP.Set_ConnectRequest();
 
 		EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
@@ -305,7 +304,7 @@ void CWorkDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		g_objCommon.Locking_MainDoor(FALSE);
 
 		SetTimer(0, 100, NULL);
-		SetTimer(1, 2000, NULL);
+		SetTimer(1, 5000, NULL);
 
 	} else {
 		KillTimer(0);

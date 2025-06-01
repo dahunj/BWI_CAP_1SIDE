@@ -659,5 +659,6 @@ void CSetupEquipDlg::OnBnClickedButtonAviConnect()
 
 void CSetupEquipDlg::OnBnClickedButtonAviDisconnect()
 {
+	g_objAviUDP.Set_ConnectStatus(FALSE);
 	g_objAviUDP.Terminate();
 }
