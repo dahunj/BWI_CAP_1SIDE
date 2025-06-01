@@ -303,8 +303,7 @@ void CWorkDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 		g_objCommon.Locking_MainDoor(FALSE);
 
-		SetTimer(0, 100, NULL);
-		SetTimer(1, 5000, NULL);
+		SetTimer(0, 100, NULL);	
 
 	} else {
 		KillTimer(0);
@@ -338,10 +337,9 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 	Display_Status();
 
 	n_TimerCnt++;
-	if(n_TimerCnt == 10)
+	if(n_TimerCnt == 50)
 	{
-		n_TimerCnt = 0;
-		g_objAviUDP.Set_ConnectStatus(FALSE);
+		n_TimerCnt = 0;		
 		g_objAviUDP.Set_ConnectRequest();
 
 	}
