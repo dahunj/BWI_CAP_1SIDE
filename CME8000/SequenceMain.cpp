@@ -2676,7 +2676,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 		return TRUE;
 
 	case 1:		// 안전 확인(Grip Open, Cylinder Up, Picker Z Ready Up, Picker Pitch Tray), Y Axis Move to Stage Position
-		if (g_objCommon.Get_LoadPickerUp() && g_objCommon.Get_LoadPickerOpen()) {
+		if (g_objCommon.Get_LoadPickerUp() && g_objCommon.Get_LoadPickerOpen(0)) {
 			if (g_objCommon.Check_Position(AX_LOAD_PICKER_Z, 0) && g_objCommon.Check_Position(AX_LOAD_PICKER_P, 0)) {
 
 				if (m_nLoadStage1Case == 20) { nLpWorkTray = 1; dLpX = m_pMoveData->dLoadStage1X[2]; }
@@ -2752,7 +2752,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 		break;
 	case 3:		// Z Axis Move to Tray Down
 		if (gData.nPickerUseCnt < 6 && m_pEquipData->bSortDirRight) {
-			if (g_objCommon.Get_LoadPickerOpen() &&
+			if (g_objCommon.Get_LoadPickerOpen(0) &&
 				g_objAJinAXL.Is_MoveDone(AX_LOAD_PICKER_Y, dLpY) && g_objCommon.Check_Position(AX_LOAD_PICKER_P, 0))
 			{
 				m_tLoadPickLoop.Takt_Save(4, 1);
@@ -2983,14 +2983,14 @@ BOOL CSequenceMain::LoadPicker_Run()
 			}
 			gData.nPNoIndex[0] = gData.nPNoLoadPick; gData.nPNoLoadPick = 0;
 			
-			g_objCommon.Set_LoadPickerOpen();
+			g_objCommon.Set_LoadPickerOpen(0);
 			//if (m_pEquipData->bUseIndexLoadVac) g_objCommon.Set_InfoIndexLoadVacuumOn(0);
 			g_objCommon.Set_InfoIndexLoadVacuumOn(0);
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(5000);
 		}
 		break;
 	case 18:	// Picker Up
-		if (g_objCommon.Get_LoadPickerOpen()) {
+		if (g_objCommon.Get_LoadPickerOpen(0)) {
 			if (!m_tLoadPickLoop.Waiting_Time(m_pEquipData->nDelayAdd[0])) break;
 			m_tLoadPickLoop.Takt_Save(4, 7);
 			m_tLoadPickLoop.Takt_Start();

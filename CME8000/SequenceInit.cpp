@@ -353,13 +353,13 @@ BOOL CSequenceInit::Initial_LoadPicker()
 			if (!m_pDX06->iLoadPickerCMCheck01 && !m_pDX06->iLoadPickerCMCheck02 && !m_pDX06->iLoadPickerCMCheck03 &&
 				!m_pDX06->iLoadPickerCMCheck06 && !m_pDX06->iLoadPickerCMCheck05 && !m_pDX06->iLoadPickerCMCheck06) {
 				g_objCommon.Set_LoadPickerUp();
-				g_objCommon.Set_LoadPickerOpen();
+				g_objCommon.Set_LoadPickerOpen(0);
 				m_niLoadPickCase++; m_tiLoadPickLoop.Set_LoopTime(5000);
 			}
 		}
 		break;
 	case 4:		// Tray/Load Picker Z Home
-		if (g_objCommon.Get_LoadPickerUp() && g_objCommon.Get_LoadPickerOpen()) {
+		if (g_objCommon.Get_LoadPickerUp() && g_objCommon.Get_LoadPickerOpen(0)) {
 			g_objAJinAXL.Home_Search(AX_TRAY_PICKER_Z);
 			g_objAJinAXL.Home_Search(AX_LOAD_PICKER_Z);
 			m_niLoadPickCase++; m_tiLoadPickLoop.Set_LoopTime(30000);
