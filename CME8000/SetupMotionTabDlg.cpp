@@ -227,6 +227,9 @@ void CSetupMotionTabDlg::OnBtnHomeClick(UINT nID)
 			AfxMessageBox("Load Stage1/2번에 Tray가 있습니다. Tray 제거 후 진행하세요."); return;
 		}
 	}
+
+	if (Check_Interlock(nStartAx + ID) == FALSE) return;
+	
 	g_objAJinAXL.Home_Search(nStartAx + ID);
 
 	m_strLog.Format("[Setup Motion] Homing - %s", g_objAJinAXL.Get_AxisName(nStartAx + ID));
