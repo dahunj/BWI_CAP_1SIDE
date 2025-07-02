@@ -60,6 +60,8 @@ public:
 	void Set_TestTrayLoad();
 	void Set_TimeUpdate();
 
+	void Set_BarcodeReply(int sPortNo, int sTrayNo, int sCmNo);
+
 	void Set_ConnectStatus(BOOL isConnected) { m_bConnected = isConnected; }
 
 	int	 Get_AviStatus() { return m_nStatusAvi; }

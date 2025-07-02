@@ -284,12 +284,23 @@ void CAviUDP::Get_BarcodeUpdate(CString sPortNo, CString sTrayNo, CString sCmNo,
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 
 	gMes.sBarID[nPNo][nTNo][nCNo] = sBarcode;
+	Set_BarcodeReply(nPNo, nTNo, nCNo);
 
 	if (sBarcode == "NOREAD"/* && atoi(sMainNo) != 0 */) {
 		CString strLog;
 		strLog.Format("[Barcode NoRead] LotId(%s), PortNo(%d), TrayNo(%d), CmNo(%d)", gLot.sLotID[nPNo], nPNo, nTNo, nCNo);
 		g_objLogFile.Save_HandlerLog(strLog);
 	}
+}
+
+void CAviUDP::Set_BarcodeReply(int sPortNo, int sTrayNo, int sCmNo)
+{
+	CString	strSendCmd;
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+
+	m_bConnected = FALSE;
+	strSendCmd.Format("BARCODE,REPLY,%s,%d,%d,%d,%d", pEquipData->sAviIp, UDP_AVI_LPORT,sPortNo, sTrayNo, sCmNo);
+	Send_Command(strSendCmd);
 }
 
 void CAviUDP::Get_ApdRequest()
