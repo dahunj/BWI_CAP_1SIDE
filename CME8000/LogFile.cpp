@@ -807,12 +807,15 @@ void CLogFile::Save_CmTrackingLog(CString strOut, int nTrayCount, int nPosX, int
 		nUlPick		= gData.nCmJigNo[nPortNo-1][nTrayNo-1][nCmNo-1][UNLOAD_PICK];
 		
 		
-		if (strOut == "GOOD") {
+		if (strOut == "GOOD") 
+		{
 			strSave.Format("%04d-%02d-%02d %02d:%02d:%02d.%03d,%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", 
 				time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond,time.wMilliseconds, gData.sComName, gData.sLotID[0], gMes.sBarID[nPortNo-1][nTrayNo-1][nCmNo-1], strJudge, nPortNo, nTrayNo, nCmNo, 
 				nLdStageNo, nLdPick, nIdxLdNo, nIdxLdJig, nUlPick,
 				0, 0, 0, nTrayCount, nPosY+1, nPosX+1);
-		} else {
+		} 
+		else
+		{
 			strSave.Format("%04d-%02d-%02d %02d:%02d:%02d.%03d,%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", 
 				time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond,time.wMilliseconds,gData.sComName, gData.sLotID[0], gMes.sBarID[nPortNo-1][nTrayNo-1][nCmNo-1], strJudge, nPortNo, nTrayNo, nCmNo, 
 				nLdStageNo, nLdPick, nIdxLdNo, nIdxLdJig, nUlPick,
