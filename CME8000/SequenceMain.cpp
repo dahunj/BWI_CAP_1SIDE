@@ -964,13 +964,29 @@ int CSequenceMain::Get_CmScanCnt()
 	int nCnt = 0;
 	int nScanCnt = -1;
 
-	for (int i=0; i<gData.nPickerUseCnt; i++) {
-		if (gData.InfoIndex[0][i] > 0) nCnt++;
-	}
 
-	if (nCnt >= 3)		nScanCnt = 2;
-	else if (nCnt >= 2)	nScanCnt = 1;
-	else if (nCnt >= 1)	nScanCnt = 0;
+	if(gData.nPickerUseCnt > 4)
+	{
+		for (int i=0; i< (gData.nPickerUseCnt/2 + gData.nPickerUseCnt%2) ; i++) 
+		{
+			if (gData.InfoIndex[0][i] > 0) nCnt++;
+		}
+
+		if (nCnt >= 3)		nScanCnt = 2;
+		else if (nCnt >= 2)	nScanCnt = 1;
+		else if (nCnt >= 1)	nScanCnt = 0;
+	}
+	else
+	{
+		for (int i=0; i< (gData.nPickerUseCnt/2) ; i++) 
+		{
+			if (gData.InfoIndex[0][i] > 0) nCnt++;
+		}
+
+		if (nCnt >= 2)	nScanCnt = 1;
+		else if (nCnt >= 1)	nScanCnt = 0;
+	}
+	
 
 	return nScanCnt;
 }
@@ -3037,7 +3053,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			m_tLoadPickLoop.Takt_Save(4, 9);
 			m_tLoadPickLoop.Takt_Start();
 
-			if (m_nVisCmAlignCase == 0) m_nVisCmAlignCase = 1;
+			if (m_nVisCmAlignCase == 0 && !Check_IndexEmpty(0)) m_nVisCmAlignCase = 1;
 
 			if (nLpWorkTray > 0) m_nLoadPickCase = 2;
 			else				 m_nLoadPickCase = 0;
@@ -3218,7 +3234,8 @@ BOOL CSequenceMain::VisionCM_Run()
 
 	case 1:		// X Move Inspect Position
 		if (g_objCommon.Check_Position(AX_VISION_CM_ALIGN_X, 0)) {
-			if (m_pEquipData->bUseVisionCmAlign) {
+			if (m_pEquipData->bUseVisionCmAlign)
+			{
 				m_dwVisCmAlign = GetTickCount();
 				m_tVisCmAlignLoop.Takt_Start();
 				nCmScanCnt = 0;
@@ -3226,8 +3243,9 @@ BOOL CSequenceMain::VisionCM_Run()
 				dCmX = m_pMoveData->dVisionCMAlignX[1];	// Inspect Position
 				g_objAJinAXL.Move_Absolute(AX_VISION_CM_ALIGN_X, dCmX);
 				m_nVisCmAlignCase++; m_tVisCmAlignLoop.Set_LoopTime(5000);
-
-			} else {
+			}
+			else
+			{
 				// Align 검사를 안하면 종료한다.
 				gData.IndexDone[0] = TRUE;
 				m_nVisCmAlignCase = 0; m_tVisCmAlignLoop.Set_LoopTime(5000);
@@ -3245,23 +3263,47 @@ BOOL CSequenceMain::VisionCM_Run()
 			}
 
 			m_tVisCmAlignLoop.Takt_Save(5, 1);
-			if (nCmScanNo <= nCmScanCnt) {
+			if (nCmScanNo <= nCmScanCnt) 
+			{
 				m_tVisCmAlignLoop.Takt_Start();
 				int nPNo = gData.nPNoIndex[0] - 1;
-				int nTNo1 = gData.nTNoIndex[0][nCmScanNo];
-				int nTNo2 = gData.nTNoIndex[0][nCmScanNo+3];
-				int nCNo1 = gData.nCNoIndex[0][nCmScanNo];
-				int nCNo2 = gData.nCNoIndex[0][nCmScanNo+3];
-				gData.nCmInspPickNo1 = nCmScanNo + 1;
-				gData.nCmInspPickNo2 = nCmScanNo + 4;
 
-				gData.nCmAlignSkip = FALSE;
-				if (m_pEquipData->bUseInlineMode) {
-					g_objInspector.Set_LoadComplete("T1", gLot.sLotID[nPNo], gData.nPNoIndex[0], nTNo1, nTNo2, nCNo1, nCNo2, gData.nCmInspPickNo1, gData.nCmInspPickNo2);
-				} else {
-					g_objInspector.Set_LoadComplete("T1", gLot.sLotID[nPNo], gData.nPNoIndex[0], nTNo1, nTNo2, nCNo1, nCNo2, gData.nCmInspPickNo1, gData.nCmInspPickNo2);
+				int nTNo1 = 0;
+				int nTNo2 = 0;
+				int nCNo1 = 0;
+				int nCNo2 = 0;
+
+				// 모듈 5개 부터는 카메라의 고정 피치가 다름 (1/4, 2/5, 3/6)
+				// 모듈 4개는 (1/3, 2/4)
+				if(gData.nPickerUseCnt > 4)
+				{
+					nTNo1 = gData.nTNoIndex[0][nCmScanNo];
+					nTNo2 = gData.nTNoIndex[0][nCmScanNo+3];
+					nCNo1 = gData.nCNoIndex[0][nCmScanNo];
+					nCNo2 = gData.nCNoIndex[0][nCmScanNo+3];
+					gData.nCmInspPickNo1 = nCmScanNo + 1;
+					gData.nCmInspPickNo2 = nCmScanNo + 4;
+
+				}
+				else
+				{
+					nTNo1 = gData.nTNoIndex[0][nCmScanNo];
+					nTNo2 = gData.nTNoIndex[0][nCmScanNo+2];
+					nCNo1 = gData.nCNoIndex[0][nCmScanNo];
+					nCNo2 = gData.nCNoIndex[0][nCmScanNo+2];
+					gData.nCmInspPickNo1 = nCmScanNo + 1;
+					gData.nCmInspPickNo2 = nCmScanNo + 3;
 				}
 				
+				gData.nCmAlignSkip = FALSE;
+				if (m_pEquipData->bUseInlineMode) 
+				{
+					g_objInspector.Set_LoadComplete("T1", gLot.sLotID[nPNo], gData.nPNoIndex[0], nTNo1, nTNo2, nCNo1, nCNo2, gData.nCmInspPickNo1, gData.nCmInspPickNo2);
+				} 
+				else 
+				{
+					g_objInspector.Set_LoadComplete("T1", gLot.sLotID[nPNo], gData.nPNoIndex[0], nTNo1, nTNo2, nCNo1, nCNo2, gData.nCmInspPickNo1, gData.nCmInspPickNo2);
+				}				
 
 				nCmScanNo++;
 				m_nVisCmAlignCase = 5; m_tVisCmAlignLoop.Set_LoopTime(30000);
