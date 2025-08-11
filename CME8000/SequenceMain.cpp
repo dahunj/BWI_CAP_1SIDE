@@ -1677,7 +1677,7 @@ BOOL CSequenceMain::TrayPicker_Run()
 			g_objCommon.Check_Position(AX_TRAY_PICKER_R, 0))
 		{
 			g_objCommon.Move_Position(AX_TRAY_PICKER_X, 0);	// AVI Position
-			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(5000);
+			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(10000);
 		}		
 		break;
 	case 3:		// Z Move to AVI Down
@@ -1688,7 +1688,7 @@ BOOL CSequenceMain::TrayPicker_Run()
 			if (!Check_AviTrayPickup()) return TRUE;
 			g_objCommon.Move_Position(AX_TRAY_PICKER_Z, 1);
 			m_tTrayPickLoop.Takt_Start();
-			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(10000);
+			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(15000);
 		}		
 		break;
 	case 4:		// Grip Close
@@ -1696,7 +1696,7 @@ BOOL CSequenceMain::TrayPicker_Run()
 			m_tTrayPickLoop.Takt_Save(1, 1);
 			m_tTrayPickLoop.Takt_Start();
 			g_objCommon.Set_TrayPickerGripClose();
-			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(5000);
+			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(10000);
 		}		
 		break;
 	case 5:		// Z Move to Ready Up
@@ -1708,7 +1708,7 @@ BOOL CSequenceMain::TrayPicker_Run()
 			gData.nTNoTrayPick = gData.nTNoAviPort;
 			gData.nCmCntTrayPick = gData.nCmCntAviPort;
 			g_objCommon.Move_Position(AX_TRAY_PICKER_Z, 0);
-			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(10000);
+			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(15000);
 		}		
 		break;
 	case 6:		// X Move to Load1 Port & AVI Tray Pickup Complete Send
