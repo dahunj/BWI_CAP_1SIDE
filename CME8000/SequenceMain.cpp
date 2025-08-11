@@ -1677,14 +1677,14 @@ BOOL CSequenceMain::TrayPicker_Run()
 			g_objCommon.Check_Position(AX_TRAY_PICKER_R, 0))
 		{
 			g_objCommon.Move_Position(AX_TRAY_PICKER_X, 0);	// AVI Position
-			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(90000);
+			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(180000);
 		}		
 		break;
 	case 3:		// Z Move to AVI Down
 		if (g_objCommon.Check_Position(AX_TRAY_PICKER_X, 0) &&
 			g_objCommon.Check_Position(AX_TRAY_PICKER_Z, 0) &&
-			g_objCommon.Check_Position(AX_TRAY_PICKER_R, 0)) {
-
+			g_objCommon.Check_Position(AX_TRAY_PICKER_R, 0)) 
+		{
 			if (!Check_AviTrayPickup()) return TRUE;
 			g_objCommon.Move_Position(AX_TRAY_PICKER_Z, 1);
 			m_tTrayPickLoop.Takt_Start();
