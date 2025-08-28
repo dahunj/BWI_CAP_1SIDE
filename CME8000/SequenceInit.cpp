@@ -270,7 +270,7 @@ BOOL CSequenceInit::Initial_MainInit()
 		}
 		break;
 	case 23:	// Unload Stage2 Exist Check
-		if (!m_pDX05->iUnloadStage2Exist) {
+		if (!m_pDX05->iUnloadStage2Exist && !m_pDX05->iUnloadStage2Exist2 && !m_pDX05->iUnloadStage2Exist3) {
 			m_niMainInitCase = 50; m_tiMainInitLoop.Set_LoopTime(5000);
 		}
 		break;
