@@ -5844,7 +5844,7 @@ BOOL CSequenceMain::UnloadStage1_Run()
 		}
 		break;
 	case 30:	// Position Check
-		if (g_objCommon.Check_Position(AX_UNLOAD_STAGE1_Z, 0) && !m_pDX05->iUnloadStage1Exist && m_pDX05->iUnloadStage1Exist2 && m_pDX05->iUnloadStage1Exist3) {
+		if (g_objCommon.Check_Position(AX_UNLOAD_STAGE1_Z, 0) && !m_pDX05->iUnloadStage1Exist && !m_pDX05->iUnloadStage1Exist2 && !m_pDX05->iUnloadStage1Exist3) {
 			m_tUnloadStage1Loop.Takt_Save(14, 14);
 			if (gData.bUnloadTrayLotEnd[0] && m_bUnloadLotEnd) {	// 도어락 오픈 후처리 확인.
 				m_pDY03->oUnloadPort2SlideLock = FALSE; m_pDY03->oUnloadPort2SlideUnlock = TRUE;
@@ -5880,7 +5880,7 @@ BOOL CSequenceMain::UnloadStage1_Run()
 		}
 		return TRUE;
 	case 51:	// 안전 확인, Y Move to Load Port Position
-		if (g_objCommon.Check_Position(AX_UNLOAD_STAGE1_Z, 0) && !m_pDX05->iUnloadStage1Exist && m_pDX05->iUnloadStage1Exist2 && m_pDX05->iUnloadStage1Exist3) {
+		if (g_objCommon.Check_Position(AX_UNLOAD_STAGE1_Z, 0) && !m_pDX05->iUnloadStage1Exist && !m_pDX05->iUnloadStage1Exist2 && !m_pDX05->iUnloadStage1Exist3) {
 			if (g_objCommon.Check_Position(AX_UNLOAD_STAGE2_Z, 0)) break;	// 인터락
 			m_tUnloadStage1Loop.Takt_Start();
 			g_objCommon.Move_Position(AX_UNLOAD_STAGE1_Y, 0);
@@ -6240,11 +6240,23 @@ BOOL CSequenceMain::Run_Simulation()
 #ifdef AJIN_BOARD_USE
 	return TRUE;
 #endif
+	
+	
+
 
 	if (m_nLoadStage1Case == 1 || m_nLoadStage2Case == 1) {
-		if (gData.nCmUseCount[0] > 0) { Sleep(SIM_WAITTIMES); m_pDX00->iLoadPort1LowCheck = TRUE; }
-		if (gData.nCmUseCount[1] > 0) { Sleep(SIM_WAITTIMES); m_pDX01->iLoadPort2LowCheck = TRUE; }
+		if (gData.nCmUseCount[0] > 0) { Sleep(SIM_WAITTIMES); m_pDX00->iLoadPort1LowCheck = TRUE; m_pDX00->iLoadPort1LowCheck = TRUE;}
+		if (gData.nCmUseCount[1] > 0) { Sleep(SIM_WAITTIMES); m_pDX01->iLoadPort2LowCheck = TRUE; m_pDX01->iLoadPort2LowCheck = TRUE;}
 	}
+
+	if(m_nTrayPickCase == 11)
+	{
+		Sleep(SIM_WAITTIMES);
+		m_pDX00->iLoadPort1LowCheck = FALSE;
+		m_bLoadPortTrayExist = FALSE;
+	}
+
+
 
 	if (m_nLoadStage1Case == 8) { Sleep(SIM_WAITTIMES); m_pDX04->iLoadStage1Exist = TRUE; }
 	if (m_nLoadStage2Case == 8) { Sleep(SIM_WAITTIMES); m_pDX04->iLoadStage2Exist = TRUE; }
@@ -6254,6 +6266,33 @@ BOOL CSequenceMain::Run_Simulation()
 
 	if (m_nUnloadStage1Case == 1) { Sleep(SIM_WAITTIMES); m_pDX03->iUnlaodPort1LowCheck = TRUE; }
 	if (m_nUnloadStage2Case == 1) { Sleep(SIM_WAITTIMES); m_pDX03->iUnlaodPort1LowCheck = TRUE; }
+
+
+	if (m_nUnloadStage1Case == 9) 
+	{ 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage1Exist = TRUE; 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage1Exist2 = TRUE; 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage1Exist3 = TRUE; 
+	}
+	if (m_nUnloadStage2Case == 9) 
+	{ 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage2Exist = TRUE;
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage2Exist2 = TRUE; 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage2Exist3 = TRUE; 
+	}
+
+	if (m_nUnloadStage1Case == 30) 
+	{ 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage1Exist = FALSE; 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage1Exist2 = FALSE; 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage1Exist3 = FALSE; 
+	}
+	if (m_nUnloadStage2Case == 30) 
+	{ 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage2Exist = FALSE;
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage2Exist2 = FALSE; 
+		Sleep(SIM_WAITTIMES); m_pDX05->iUnloadStage2Exist3 = FALSE; 
+	}
 
 /*
 	m_nTrayPickCase			= 0;		//  1. (Error : 3100)
