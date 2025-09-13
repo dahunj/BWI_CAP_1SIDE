@@ -1661,7 +1661,7 @@ BOOL CSequenceMain::TrayPicker_Run()
 			g_objCommon.Check_Position(AX_TRAY_PICKER_R, 0))
 		{
 			g_objCommon.Move_Position(AX_TRAY_PICKER_X, 0);	// AVI Position
-			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(5000);
+			m_nTrayPickCase++; m_tTrayPickLoop.Set_LoopTime(90000);
 		}		
 		break;
 	case 3:		// Z Move to AVI Down
