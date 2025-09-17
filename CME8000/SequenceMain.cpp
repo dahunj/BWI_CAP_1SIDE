@@ -5964,7 +5964,7 @@ BOOL CSequenceMain::UnloadStage2_Run()
 		break;
 	case 7:		// Support In
 		if (g_objCommon.Check_Position(AX_UNLOAD_STAGE2_Z, 3)) {
-			if (!m_tUnloadStage2Loop.Waiting_Time(500)) break;
+			if (!m_tUnloadStage2Loop.Waiting_Time(200)) break;
 			m_tUnloadStage2Loop.Takt_Save(15, 3);
 			m_tUnloadStage2Loop.Takt_Start();
 			g_objCommon.Set_UnloadPortSupportIn(1);
@@ -5973,7 +5973,7 @@ BOOL CSequenceMain::UnloadStage2_Run()
 		break;
 	case 8:		// Tray Check, Stage Master In
 		if (g_objCommon.Get_UnloadPortSupportIn(1)) {
-			if (!m_tUnloadStage2Loop.Waiting_Time(500)) break;
+			if (!m_tUnloadStage2Loop.Waiting_Time(200)) break;
 			m_tUnloadStage2Loop.Takt_Save(15, 4);
 			m_tUnloadStage2Loop.Takt_Start();
 			// Port와 Tray가 아슬아슬하여 부딪힐때가 있어 MoveDown에서 이동하도록 한다.
