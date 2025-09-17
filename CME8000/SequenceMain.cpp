@@ -5667,7 +5667,7 @@ BOOL CSequenceMain::UnloadStage1_Run()
 		break;
 
 	case 10:	// 안전 확인 
-		if (!m_tUnloadStage1Loop.Waiting_Time(100)) break;
+		if (!m_tUnloadStage1Loop.Waiting_Time(100)) return TRUE;
 		if (g_objCommon.Get_UnloadTrayMasterSlaveOut(1))
 		{
 			m_pDY05->oUnloadStage1MasterIn = TRUE;
@@ -5993,7 +5993,7 @@ BOOL CSequenceMain::UnloadStage2_Run()
 		break;
 
 	case 10:	// 안전 확인 
-		if (!m_tUnloadStage2Loop.Waiting_Time(100)) break;
+		if (!m_tUnloadStage2Loop.Waiting_Time(100)) return TRUE;
 		if (g_objCommon.Get_UnloadTrayMasterSlaveOut(2))
 		{
 			m_pDY05->oUnloadStage2MasterIn = TRUE;
