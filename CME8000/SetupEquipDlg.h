@@ -75,6 +75,9 @@ public:
 	CLabelCS	m_lblResultTest[3];
 	CEditCS		m_edtResultTest[3];
 
+	CLabelCS	m_lblCMVision[3];
+	CStaticCS	m_stcCMVision[3];
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
@@ -110,6 +113,9 @@ public:
 	void Cancel_EquipData();
 	afx_msg void OnBnClickedButtonAviConnect();
 	afx_msg void OnBnClickedButtonAviDisconnect();
+	afx_msg void OnStnClickedStcCmVision0();
+	afx_msg void OnStnClickedStcCmVision1();
+	afx_msg void OnStnClickedStcCmVision2();
 };
 
 ///////////////////////////////////////////////////////////////////////////////

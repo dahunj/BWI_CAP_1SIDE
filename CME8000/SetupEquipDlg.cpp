@@ -96,6 +96,9 @@ void CSetupEquipDlg::DoDataExchange(CDataExchange* pDX)
 	for (int i = 0; i < 3; i++) DDX_Control(pDX, IDC_LBL_RESULT_TEST_0 + i, m_lblResultTest[i]);
 	for (int i = 0; i < 3; i++) DDX_Control(pDX, IDC_EDT_RESULT_TEST_0 + i, m_edtResultTest[i]);
 	for (int i = 0; i < 2; i++) DDX_Control(pDX, IDC_STC_LOAD_CELL_DATA_0 + i, m_stcLoadCellData[i]);
+
+	for(int i = 0; i < 3; i++) DDX_Control(pDX, IDC_LBL_VISION_0 +i, m_lblCMVision[i] );
+	for(int i = 0; i < 3; i++) DDX_Control(pDX, IDC_STC_CM_VISION_0 +i, m_stcCMVision[i]);
 }
 
 BEGIN_MESSAGE_MAP(CSetupEquipDlg, CDialogEx)
@@ -118,6 +121,9 @@ BEGIN_MESSAGE_MAP(CSetupEquipDlg, CDialogEx)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_LOAD_CELL_DATA_0, IDC_STC_LOAD_CELL_DATA_1, OnStcLoadCellDataClick)
 	ON_BN_CLICKED(IDC_BUTTON_AVI_CONNECT, &CSetupEquipDlg::OnBnClickedButtonAviConnect)
 	ON_BN_CLICKED(IDC_BUTTON_AVI_DISCONNECT, &CSetupEquipDlg::OnBnClickedButtonAviDisconnect)
+	ON_STN_CLICKED(IDC_STC_CM_VISION_0, &CSetupEquipDlg::OnStnClickedStcCmVision0)
+	ON_STN_CLICKED(IDC_STC_CM_VISION_1, &CSetupEquipDlg::OnStnClickedStcCmVision1)
+	ON_STN_CLICKED(IDC_STC_CM_VISION_2, &CSetupEquipDlg::OnStnClickedStcCmVision2)
 END_MESSAGE_MAP()
 
 // CSetupEquipDlg ¸Þ½ÃÁö Ã³¸®±âÀÔ´Ï´Ù.
@@ -465,6 +471,10 @@ void CSetupEquipDlg::Initial_Controls()
 	for (int i = 0; i < 3; i++) m_lblResultTest[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x60, 0x60, 0x60));
 	for (int i = 0; i < 3; i++) m_edtResultTest[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT);
 	for (int i = 0; i < 2; i++) m_stcLoadCellData[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xE0, 0xE0));
+
+	for (int i = 0; i < 3; i++) m_lblCMVision[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x60, 0x60, 0x60));
+	for (int i = 0; i < 3; i++) m_stcCMVision[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xD0, 0xD0, 0xD0));
+
 }
 
 void CSetupEquipDlg::Display_EquipData()
@@ -533,6 +543,11 @@ void CSetupEquipDlg::Display_EquipData()
 	strData.Format("%0.3lf", pEquipData->dAssyPickForce[1]); m_stcLoadCellData[1].SetWindowText(strData);
 
 	gData.nPickerUseCnt == 3 ? m_rdoPickCnt[0].SetCheck(TRUE) : (gData.nPickerUseCnt == 4 ? m_rdoPickCnt[1].SetCheck(TRUE) : m_rdoPickCnt[2].SetCheck(TRUE));
+		
+	strData.Format("%d", pEquipData->nInspectCmScanTimes); m_stcCMVision[0].SetWindowTextA(strData); // scan count 
+	strData.Format("%d", pEquipData->nInspectCmLotTimes); m_stcCMVision[1].SetWindowTextA(strData);
+	strData.Format("%d", pEquipData->nInspectCmMinutes); m_stcCMVision[2].SetWindowTextA(strData); 
+	
 }
 
 void CSetupEquipDlg::Save_EquipData()
@@ -625,6 +640,12 @@ void CSetupEquipDlg::Save_EquipData()
 	if (m_rdoPickCnt[1].GetCheck()) INI.Set_Integer("EQUIPMENT", "PICK_CNT", 4);
 	if (m_rdoPickCnt[2].GetCheck()) INI.Set_Integer("EQUIPMENT", "PICK_CNT", 5);
 
+	m_stcCMVision[0].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("OPTION", "SCAN_TIMES", nData); // Scan Times per 1 Lot 
+	gData.nInspectCmScanLineCntVolatile = nData;
+	m_stcCMVision[1].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer ("OPTION", "LOT_TIMES", nData); // Lot Quantity 
+	m_stcCMVision[2].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer ("OPTION", "MINUTES", nData); // Hours DENOMINATOR
+
+
 	g_objLogFile.Save_HandlerLog("[Setup Equip] Save Click");
 
 	Cancel_EquipData();
@@ -661,4 +682,34 @@ void CSetupEquipDlg::OnBnClickedButtonAviDisconnect()
 {
 	g_objAviUDP.Set_ConnectStatus(FALSE);
 	g_objAviUDP.Terminate();
+}
+
+
+void CSetupEquipDlg::OnStnClickedStcCmVision0()
+{
+	CString strOld, strNew;
+	m_stcCMVision[0].GetWindowText(strOld);
+	if (g_objCommon.Show_NumPad(strOld, strNew) != IDOK) return;
+
+	m_stcCMVision[0].SetWindowText(strNew);
+}
+
+
+void CSetupEquipDlg::OnStnClickedStcCmVision1()
+{
+	CString strOld, strNew;
+	m_stcCMVision[1].GetWindowText(strOld);
+	if (g_objCommon.Show_NumPad(strOld, strNew) != IDOK) return;
+
+	m_stcCMVision[1].SetWindowText(strNew);
+}
+
+
+void CSetupEquipDlg::OnStnClickedStcCmVision2()
+{
+	CString strOld, strNew;
+	m_stcCMVision[2].GetWindowText(strOld);
+	if (g_objCommon.Show_NumPad(strOld, strNew) != IDOK) return;
+
+	m_stcCMVision[2].SetWindowText(strNew);
 }

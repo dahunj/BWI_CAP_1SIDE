@@ -74,9 +74,9 @@
 #define SIM_WAITTIMEM	 10		//
 #define ECM_LOG			"D:\\EVMS\\TP\\log\\"
 
-#define AJIN_BOARD_USE
-#define LOT_BARCODE_USE
-#define LOAD_CELL_USE
+//#define AJIN_BOARD_USE
+//#define LOT_BARCODE_USE
+//#define LOAD_CELL_USE
 
 // 테스트 런 옵션
 //#define DRY_RUN_TEST		// Dry Run Test 시 사용
@@ -286,6 +286,22 @@ typedef struct {
 	CString	sComName;
 	int		nDoorLockTime;
 	DWORD	dwDoorStartTime;
+
+	int		nInspectCmScanLineCnt;
+	int		nInspectCmScanLineCntVolatile;
+
+	int		nInspectCmLotCount;
+	DWORD	dwRunTimeNow;
+	DWORD	dwRunTimeAccumulated;
+
+
+	BOOL		bInspectCmThisLotVSkip; // 연속랏이어서 돌던거는 마저 돌고 다음랏부터 비전 시작 
+	int			nInspectCmCheckTime;
+	CString		sInspectCmLotIDPrevious;
+	CString		sInspectCmLotIDLater;
+	BOOL		bReload[1]; // Vision 재시작시 Reload (load complete 재시도)
+
+
 } GLOVAL_DATA;
 
 typedef struct {
