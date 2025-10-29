@@ -68,6 +68,9 @@ CSequenceMain::CSequenceMain()
 	m_nUnloadLotIndex = 0;
 
 	Reset_MainRunCase();
+
+	gData.bInspectCmThisLotVSkip = FALSE;
+	gData.nInspectCmCheckTime = 0;
 }
 
 CSequenceMain::~CSequenceMain()
@@ -975,9 +978,11 @@ int CSequenceMain::Get_CmScanCnt()
 		if (gData.InfoIndex[0][i] > 0) nCnt++;
 	}
 
-	if (nCnt >= 3)		nScanCnt = 2;
+	/*if (nCnt >= 3)		nScanCnt = 2;
 	else if (nCnt >= 2)	nScanCnt = 1;
-	else if (nCnt >= 1)	nScanCnt = 0;
+	else if (nCnt >= 1)	nScanCnt = 0;*/
+
+	nScanCnt = nCnt-1;
 
 	return nScanCnt;
 }
@@ -2011,6 +2016,10 @@ BOOL CSequenceMain::LoadStage1_Run()
 			m_tLoadStage1Loop.Takt_Start();
 
 			m_bLoadPortTrayExist = FALSE;	// Port에 Tray가 없다고 알려준다.
+#ifndef AJIN_BOARD_USE
+			m_pDX00->iLoadPort1LowCheck = FALSE;
+#endif
+
 
 			m_pDY04->oLoadStage1MasterIn = TRUE;
 			g_objAJinAXL.Write_Output(4);
@@ -2079,7 +2088,14 @@ BOOL CSequenceMain::LoadStage1_Run()
 		}
 		break;
 	case 17:	// Check Lot Ready
-		if (g_objInspector.Check_LotReady()) {
+		if (g_objInspector.Check_LotReady()) 
+		{
+			gData.sInspectCmLotIDLater = gData.sLotID[nLs1AviPort-1];
+			if (gData.nInspectCmLotCount < m_pEquipData->nInspectCmLotTimes ) 
+			{					
+				gData.nInspectCmCheckTime = 0;
+				gData.bInspectCmThisLotVSkip = FALSE;
+			}
 			m_nLoadStage1Case = 20; m_tLoadStage1Loop.Set_LoopTime(5000);
 		}
 		break;
@@ -2399,6 +2415,9 @@ BOOL CSequenceMain::LoadStage2_Run()
 			m_tLoadStage2Loop.Takt_Start();
 
 			m_bLoadPortTrayExist = FALSE;	// Port에 Tray가 없다고 알려준다.
+#ifndef AJIN_BOARD_USE
+			m_pDX00->iLoadPort1LowCheck = FALSE;
+#endif
 
 			m_pDY04->oLoadStage2MasterIn = TRUE;
 			g_objAJinAXL.Write_Output(4);
@@ -2467,7 +2486,14 @@ BOOL CSequenceMain::LoadStage2_Run()
 		}
 		break;
 	case 17:	// Check Lot Ready
-		if (g_objInspector.Check_LotReady()) {
+		if (g_objInspector.Check_LotReady()) 
+		{
+			gData.sInspectCmLotIDLater = gData.sLotID[nLs2AviPort-1];
+			if (gData.nInspectCmLotCount < m_pEquipData->nInspectCmLotTimes) 
+			{				
+				gData.nInspectCmCheckTime = 0;
+				gData.bInspectCmThisLotVSkip = FALSE;
+			}
 			m_nLoadStage2Case = 20; m_tLoadStage2Loop.Set_LoopTime(5000);
 		}
 		break;
@@ -3227,7 +3253,8 @@ BOOL CSequenceMain::VisionCM_Run()
 
 	static double dCmX = 0.0;
 
-	switch (m_nVisCmAlignCase) {
+	switch (m_nVisCmAlignCase) 
+	{
 	case 0:		// Load Picker에서 Start
 		return TRUE;
 
@@ -3258,7 +3285,9 @@ BOOL CSequenceMain::VisionCM_Run()
 				g_objAJinAXL.Move_Absolute(AX_VISION_CM_ALIGN_X, dCmX);
 				m_nVisCmAlignCase++; m_tVisCmAlignLoop.Set_LoopTime(5000);
 
-			} else {
+			}
+			else
+			{
 				// Align 검사를 안하면 종료한다.
 				gData.IndexDone[0] = TRUE;
 				m_nVisCmAlignCase = 0; m_tVisCmAlignLoop.Set_LoopTime(5000);
@@ -3280,11 +3309,11 @@ BOOL CSequenceMain::VisionCM_Run()
 				m_tVisCmAlignLoop.Takt_Start();
 				int nPNo = gData.nPNoIndex[0] - 1;
 				int nTNo1 = gData.nTNoIndex[0][nCmScanNo];
-				int nTNo2 = gData.nTNoIndex[0][nCmScanNo+3];
+				int nTNo2 = 0;//gData.nTNoIndex[0][nCmScanNo+3];
 				int nCNo1 = gData.nCNoIndex[0][nCmScanNo];
-				int nCNo2 = gData.nCNoIndex[0][nCmScanNo+3];
+				int nCNo2 = 0;//gData.nCNoIndex[0][nCmScanNo+3];
 				gData.nCmInspPickNo1 = nCmScanNo + 1;
-				gData.nCmInspPickNo2 = nCmScanNo + 4;
+				gData.nCmInspPickNo2 = 0;//nCmScanNo + 4;
 
 				gData.nCmAlignSkip = FALSE;
 				if (m_pEquipData->bUseInlineMode) {
@@ -3302,6 +3331,14 @@ BOOL CSequenceMain::VisionCM_Run()
 			}
 		}
 		break;
+	case 3:
+		{
+			if (gData.bReload[0]) {
+				gData.bReload[0] = FALSE;
+			}
+			g_objCommon.Move_Position(AX_VISION_CM_ALIGN_X, 0);
+			m_nVisCmAlignCase = 1; m_tVisCmAlignLoop.Set_LoopTime(5000);
+		}
 
 	case 5:	// Wait for CM inspection(30sec)
 		if (!m_pEquipData->bUseVisionCmAlign) {
@@ -3318,7 +3355,8 @@ BOOL CSequenceMain::VisionCM_Run()
 	case 10:	// 다음 검사 위치 피치 이동
 		if (!m_pEquipData->bUseVisionCmAlign) { if(!m_tVisCmAlignLoop.Waiting_Time(300)) break; }	// Delay
 
-		if (g_objAJinAXL.Is_Done(AX_VISION_CM_ALIGN_X)) {
+		if (g_objAJinAXL.Is_Done(AX_VISION_CM_ALIGN_X)) 
+		{
 			m_tVisCmAlignLoop.Takt_Save(5, 2);
 			if (nCmScanNo <= nCmScanCnt) {				
 				m_tVisCmAlignLoop.Takt_Start();
@@ -3326,7 +3364,9 @@ BOOL CSequenceMain::VisionCM_Run()
 				g_objAJinAXL.Move_Absolute(AX_VISION_CM_ALIGN_X, dCmX);
 				m_nVisCmAlignCase = 2; m_tVisCmAlignLoop.Set_LoopTime(10000);
 
-			} else {
+			} 
+			else
+			{
 				m_nVisCmAlignCase = 15; m_tVisCmAlignLoop.Set_LoopTime(10000);
 			}
 		}
@@ -3341,7 +3381,21 @@ BOOL CSequenceMain::VisionCM_Run()
 		break;
 	case 16:	// Check Position
 		if (g_objCommon.Check_Position(AX_VISION_CM_ALIGN_X, 0)) {
-			if (Check_CmAlignDone()) {
+			if (Check_CmAlignDone()) 
+			{
+				gData.nInspectCmScanLineCnt++;
+				if(gData.nInspectCmScanLineCnt >= m_pEquipData->nInspectCmScanTimes)
+				{	
+					gData.nInspectCmLotCount++;
+					gData.nInspectCmScanLineCnt = 0;					
+				}		
+
+				if( gData.nInspectCmLotCount >= m_pEquipData->nInspectCmLotTimes)
+				{					
+					gData.bInspectCmThisLotVSkip = TRUE;
+				}
+
+
 				m_tVisCmAlignLoop.Takt_Save(5,3);
 				gData.IndexDone[0] = TRUE;
 // 				if (gData.IndexDone[0] && Check_CmAlignDone())	{ m_nVisCmAlignCase = 0; m_tVisCmAlignLoop.Set_LoopTime(30000); }
@@ -6308,6 +6362,13 @@ BOOL CSequenceMain::Run_Simulation()
 
 	if (m_nUnloadStage1Case == 1) { Sleep(SIM_WAITTIMES); m_pDX03->iUnlaodPort1LowCheck = TRUE; }
 	if (m_nUnloadStage2Case == 1) { Sleep(SIM_WAITTIMES); m_pDX03->iUnlaodPort1LowCheck = TRUE; }
+
+	if (m_nTrayPickCase == 11)
+	{
+		Sleep(SIM_WAITTIMES);
+		m_bLoadPortTrayExist = FALSE;
+		m_pDX00->iLoadPort1LowCheck = FALSE;
+	}
 
 /*
 	m_nTrayPickCase			= 0;		//  1. (Error : 3100)
