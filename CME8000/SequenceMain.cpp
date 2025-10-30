@@ -1782,6 +1782,10 @@ BOOL CSequenceMain::TrayPicker_Run()
 			m_tTrayPickLoop.Takt_Save(1, 6);
 			m_tTrayPickLoop.Takt_Start();
 
+#ifndef AJIN_BOARD_USE
+			m_pDX00->iLoadPort1LowCheck = TRUE;
+#endif
+
 			m_bLoadPortTrayExist = TRUE;
 			gData.nPNoLoadPort = gData.nPNoTrayPick;
 			gData.nTNoLoadPort = gData.nTNoTrayPick;
@@ -2023,8 +2027,6 @@ BOOL CSequenceMain::LoadStage1_Run()
 #ifndef AJIN_BOARD_USE
 			m_pDX00->iLoadPort1LowCheck = FALSE;
 #endif
-
-
 			m_pDY04->oLoadStage1MasterIn = TRUE;
 			g_objAJinAXL.Write_Output(4);
 			m_nLoadStage1Case++; m_tLoadStage1Loop.Set_LoopTime(5000);

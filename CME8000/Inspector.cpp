@@ -52,9 +52,6 @@ void CInspector::Initialize()
 #else
 	bOpened = m_UdpVisionPC.Open_Socket(7000, 7001, "127.0.0.1", this);
 #endif
-	
-	
-
 	if (bOpened) Set_ConnectRequest();
 }
 
