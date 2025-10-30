@@ -156,7 +156,8 @@ BOOL CSequenceInit::Check_Mode()
 
 UINT CSequenceInit::Thread_Initial(LPVOID lpVoid)
 {
-	while (g_objSequenceInit.m_bThreadInitial) {
+	while (g_objSequenceInit.m_bThreadInitial) 
+	{
 		if (!g_objSequenceInit.Check_Mode()) break;
 		if (!g_objCommon.Check_MainEmgAir()) break;
 		if (!g_objCommon.Check_MainDoor()) break;

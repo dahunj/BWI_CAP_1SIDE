@@ -303,9 +303,10 @@ void CWorkDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 		g_objCommon.Locking_MainDoor(FALSE);
 
-		SetTimer(0, 100, NULL);	
-
-	} else {
+		SetTimer(0, 100, NULL);		
+	} 
+	else 
+	{
 		KillTimer(0);
 		m_pWorkInfoDlg->ShowWindow(SW_HIDE);
 	}
@@ -405,16 +406,21 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				g_objCommon.Show_Error(40);		// 초기화 완료 에러
 			}
 
-		} else {				// Auto Running
-			if (g_objMES.m_bMESUse==FALSE) {
-				if (!g_objSequenceMain.Is_MainThreadRun()) {
+		} else
+		{				// Auto Running
+			if (g_objMES.m_bMESUse==FALSE)
+			{
+				if (!g_objSequenceMain.Is_MainThreadRun())
+				{
 					g_objLogFile.Save_HandlerLog("[Work Mode] Auto STOP");
 					pMainDlg->Set_CurrentState(STATE_STOP);
 				}
 			}
 		}
 
-	} else if (m_rdoWorkStop.GetCheck()) {
+	} 
+	else if (m_rdoWorkStop.GetCheck()) 
+	{
 		if (m_bAutoRunning) {	// First AutoStop
 			m_bAutoRunning = FALSE;
 
@@ -435,7 +441,10 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			pMainDlg->Save_EquipRunTime();
 			g_objCommon.Save_MotionPos();
 
-		} else {				// Stop
+		} 
+		else 
+		{	
+			// Stop
 			int nState = theApp.Get_MainState();
 			if (nState != STATE_ERROR) g_objCommon.Check_MainEmgAir();
 		}
