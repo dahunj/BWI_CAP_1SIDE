@@ -12,10 +12,10 @@
 #include "MESInterface.h"
 #include "AviUDP.h"
 
-#define UDP_VPC_HOST_IP	"127.0.0.1"
+#define UDP_VPC_HOST_IP	"192.168.25.23"
 
-#define UDP_VPC_LPORT	8001
-#define UDP_VPC_HPORT	8000
+#define UDP_VPC_LPORT	21000
+#define UDP_VPC_HPORT	21001
 
 IMPLEMENT_DYNAMIC(CInspector, CWnd)
 
@@ -152,6 +152,9 @@ LRESULT CInspector::OnUdpReceive(WPARAM wLocalPort, LPARAM lParam)
 
 		} else if (strCmd == "HEART") {
 			if (strOp == "BEAT") Get_HeartBeat();
+		
+		} else if (strCmd == "RELOAD") {
+			if (strOp == "REQUEST") Get_ReloadRequest();
 		}
 	}
 
