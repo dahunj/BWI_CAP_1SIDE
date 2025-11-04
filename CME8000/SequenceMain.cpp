@@ -3314,12 +3314,12 @@ BOOL CSequenceMain::VisionCM_Run()
 			if (nCmScanNo <= nCmScanCnt) {
 				m_tVisCmAlignLoop.Takt_Start();
 				int nPNo = gData.nPNoIndex[0] - 1;
-				int nTNo1 = gData.nTNoIndex[0][nCmScanNo];
-				int nTNo2 = 0;//gData.nTNoIndex[0][nCmScanNo+3];
-				int nCNo1 = gData.nCNoIndex[0][nCmScanNo];
-				int nCNo2 = 0;//gData.nCNoIndex[0][nCmScanNo+3];
-				gData.nCmInspPickNo1 = nCmScanNo + 1;
-				gData.nCmInspPickNo2 = 0;//nCmScanNo + 4;
+				int nTNo1 = 0;//gData.nTNoIndex[0][nCmScanNo];
+				int nTNo2 = gData.nTNoIndex[0][nCmScanNo];
+				int nCNo1 = 0;//;gData.nCNoIndex[0][nCmScanNo];
+				int nCNo2 = gData.nCNoIndex[0][nCmScanNo];
+				gData.nCmInspPickNo1 = 0;//nCmScanNo + 1;
+				gData.nCmInspPickNo2 = nCmScanNo + 1;//nCmScanNo + 4;
 
 				gData.nCmAlignSkip = FALSE;
 				if (m_pEquipData->bUseInlineMode) {
