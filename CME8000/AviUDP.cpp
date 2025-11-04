@@ -153,6 +153,7 @@ LRESULT CAviUDP::OnUdpReceive(WPARAM wLocalPort, LPARAM lParam)
 
 		} else if (strCmd == "TIME") {
 			if (strOp == "UPDATE") Get_TimeUpdate(strArg[0]);
+		
 		} 
 	}
 

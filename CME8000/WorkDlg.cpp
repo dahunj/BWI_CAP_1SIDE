@@ -147,6 +147,8 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_LBL_LOT_3, &CWorkDlg::OnStnClickedLblLot3)
 	ON_STN_CLICKED(IDC_LBL_CAP_LOT_0, &CWorkDlg::OnStnClickedLblCapLot0)
 	ON_STN_CLICKED(IDC_LBL_CAP_LOT_3, &CWorkDlg::OnStnClickedLblShipLot0)
+	ON_BN_CLICKED(IDC_BTN_LOTSTART1, &CWorkDlg::OnBnClickedBtnLotstart1)
+	ON_BN_CLICKED(IDC_BTN_LOTSTART2, &CWorkDlg::OnBnClickedBtnLotstart2)
 END_MESSAGE_MAP()
 
 // CWorkDlg 메시지 처리기입니다.
@@ -2001,4 +2003,16 @@ void CWorkDlg::OnBnClickedButton2()
 
 // 	CCME8000Dlg *pMainDlg = (CCME8000Dlg*)AfxGetApp()->GetMainWnd();
 // 	pMainDlg->Set_LampFlicker(FALSE, 5);
+}
+
+
+void CWorkDlg::OnBnClickedBtnLotstart1()
+{
+	g_objInspector.Set_LotStart(gData.sLotID[0],1,"","" );
+}
+
+
+void CWorkDlg::OnBnClickedBtnLotstart2()
+{
+	g_objInspector.Set_LotStart(gData.sLotID[1],2,"","" );
 }
