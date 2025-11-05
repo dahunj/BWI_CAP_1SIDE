@@ -520,7 +520,7 @@ void CInspector::Set_LoadComplete(CString sGbn, CString sLotId, int nPortNo, int
 	int nINo1 = -1;
 	int nINo2 = -1;
 
-	if (sGbn == "T1") {
+	if (sGbn == "T2") {
 		int nScanReq = 0;
 		if (nCNo1 > 0) {
 			strBar1 = gMes.sBarID[nPortNo-1][nTNo1-1][nCNo1-1];
