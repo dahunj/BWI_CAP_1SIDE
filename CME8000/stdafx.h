@@ -69,7 +69,7 @@
 	#pragma comment(lib, "CSGridR.lib")
 #endif
 
-#define MAIN_VERSION	_T("V 1.3.0b")
+#define MAIN_VERSION	_T("V 1.3.1b")
 #define SIM_WAITTIMES	 10		//
 #define SIM_WAITTIMEM	 10		//
 #define ECM_LOG			"D:\\EVMS\\TP\\log\\"

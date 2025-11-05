@@ -3311,7 +3311,8 @@ BOOL CSequenceMain::VisionCM_Run()
 			}
 
 			m_tVisCmAlignLoop.Takt_Save(5, 1);
-			if (nCmScanNo <= nCmScanCnt) {
+			if (nCmScanNo <= nCmScanCnt) 
+			{
 				m_tVisCmAlignLoop.Takt_Start();
 				int nPNo = gData.nPNoIndex[0] - 1;
 				int nTNo1 = 0;//gData.nTNoIndex[0][nCmScanNo];
@@ -3323,9 +3324,9 @@ BOOL CSequenceMain::VisionCM_Run()
 
 				gData.nCmAlignSkip = FALSE;
 				if (m_pEquipData->bUseInlineMode) {
-					g_objInspector.Set_LoadComplete("T1", gLot.sLotID[nPNo], gData.nPNoIndex[0], nTNo1, nTNo2, nCNo1, nCNo2, gData.nCmInspPickNo1, gData.nCmInspPickNo2);
+					g_objInspector.Set_LoadComplete("T2", gLot.sLotID[nPNo], gData.nPNoIndex[0], nTNo1, nTNo2, nCNo1, nCNo2, gData.nCmInspPickNo1, gData.nCmInspPickNo2);
 				} else {
-					g_objInspector.Set_LoadComplete("T1", gLot.sLotID[nPNo], gData.nPNoIndex[0], nTNo1, nTNo2, nCNo1, nCNo2, gData.nCmInspPickNo1, gData.nCmInspPickNo2);
+					g_objInspector.Set_LoadComplete("T2", gLot.sLotID[nPNo], gData.nPNoIndex[0], nTNo1, nTNo2, nCNo1, nCNo2, gData.nCmInspPickNo1, gData.nCmInspPickNo2);
 				}
 				
 

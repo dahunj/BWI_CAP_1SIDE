@@ -44,6 +44,7 @@ private:
 	void Get_HeartBeat();
 
 	void Get_ReloadRequest();
+	void Get_ScanComplete(CString sGbn, CString sLotId, CString sPortNo, CString sTrayNo, CString sCmNo);
 
 	void Send_Command(CString strSend);
 	void Exception_Log(CString sFunc, CString sGbn, int nCase);	// Recevie Exception Log
