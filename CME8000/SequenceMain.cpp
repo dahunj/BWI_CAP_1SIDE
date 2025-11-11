@@ -6420,6 +6420,11 @@ BOOL CSequenceMain::Run_Simulation()
 		if (gData.nCmUseCount[1] > 0) { Sleep(SIM_WAITTIMES); m_pDX01->iLoadPort2LowCheck = TRUE; }
 	}
 
+	if (m_nLoadStage1Case == 2 || m_nLoadStage2Case == 2) {
+		if (gData.nCmUseCount[0] > 0) { Sleep(SIM_WAITTIMES); m_pDX00->iLoadPort1LowCheck = TRUE; }
+		if (gData.nCmUseCount[1] > 0) { Sleep(SIM_WAITTIMES); m_pDX01->iLoadPort2LowCheck = TRUE; }
+	}
+
 	if (m_nLoadStage1Case == 8) { Sleep(SIM_WAITTIMES); m_pDX04->iLoadStage1Exist = TRUE; }
 	if (m_nLoadStage2Case == 8) { Sleep(SIM_WAITTIMES); m_pDX04->iLoadStage2Exist = TRUE; }
 
